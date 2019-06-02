@@ -10,6 +10,7 @@ struct FExtraViewInfo
 
 	uint8 GreaterPriorityApplied = 0;
 
+
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Camera)
 	FVector AdditiveSocketOffset;
 
