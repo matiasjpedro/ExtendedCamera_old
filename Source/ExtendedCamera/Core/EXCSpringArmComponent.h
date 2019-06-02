@@ -40,11 +40,11 @@ public:
 	 */
 	virtual void BeginPlay() override;
 
-	bool bIsAdditiveModified = false;
-	void RestartAdditive();
+	bool bIsAdditiveDirty = false;
+	void CleanAdditive();
 
-	bool bIsBaseModified = false;
-	void RestartBase();
+	bool bIsBaseDirty = false;
+	void CleanBase();
 
 protected:
 

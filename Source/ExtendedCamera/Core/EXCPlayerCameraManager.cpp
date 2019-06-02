@@ -31,9 +31,9 @@ void AEXCPlayerCameraManager::UpdateViewTarget(FTViewTarget& OutVT, float DeltaT
 		
 		if (EXCSpringArm != nullptr)
 		{
-			ViewTargetExtraInfo.DefaultSocketOffset = EXCSpringArm->DefaultSocketOffset;
-			ViewTargetExtraInfo.DefaultTargetOffset = EXCSpringArm->DefaultTargetOffset;
-			ViewTargetExtraInfo.DefaultSpringArmLenght = EXCSpringArm->DefaultSpringArmLenght;
+			ViewTargetExtraInfo.SocketOffset = FEXCVector(EXCSpringArm->DefaultSocketOffset);
+			ViewTargetExtraInfo.TargetOffset = FEXCVector(EXCSpringArm->DefaultTargetOffset);
+			ViewTargetExtraInfo.ArmLenght = FEXCFloat(EXCSpringArm->DefaultSpringArmLenght);
 		}
 	}
 
@@ -47,35 +47,35 @@ void AEXCPlayerCameraManager::UpdateViewTarget(FTViewTarget& OutVT, float DeltaT
 		{
 			if (!ViewTargetExtraInfo.IsAdditiveZero())
 			{
-				EXCSpringArm->AdditiveSpringArmLenght = ViewTargetExtraInfo.AdditiveSpringArmLength;
-				EXCSpringArm->AdditiveSocketOffset = ViewTargetExtraInfo.AdditiveSocketOffset;
-				EXCSpringArm->AdditiveTargetOffset = ViewTargetExtraInfo.AdditiveTargetOffset;
+				EXCSpringArm->AdditiveSpringArmLenght = ViewTargetExtraInfo.ArmLenght.AdditiveValue;
+				EXCSpringArm->AdditiveSocketOffset = ViewTargetExtraInfo.SocketOffset.AdditiveValue;
+				EXCSpringArm->AdditiveTargetOffset = ViewTargetExtraInfo.TargetOffset.AdditiveValue;
 
-				if (!EXCSpringArm->bIsAdditiveModified)
-					EXCSpringArm->bIsAdditiveModified = true;
+				if (!EXCSpringArm->bIsAdditiveDirty)
+					EXCSpringArm->bIsAdditiveDirty = true;
 			}
-			else if(EXCSpringArm->bIsAdditiveModified)
+			else if(EXCSpringArm->bIsAdditiveDirty)
 			{
-				EXCSpringArm->RestartAdditive();
+				EXCSpringArm->CleanAdditive();
 			}
 			
 			if (!ViewTargetExtraInfo.IsBaseDeltaZero())
 			{
-				EXCSpringArm->BaseSpringArmLenght = ViewTargetExtraInfo.DefaultSpringArmLenght + ViewTargetExtraInfo.BaseDeltaSpringArmLenght;
-				EXCSpringArm->BaseSocketOffset = ViewTargetExtraInfo.DefaultSocketOffset + ViewTargetExtraInfo.BaseDeltaSocketOffset;
-				EXCSpringArm->BaseTargetOffset = ViewTargetExtraInfo.DefaultTargetOffset + ViewTargetExtraInfo.BaseDeltaTargetOffset;
+				EXCSpringArm->BaseSpringArmLenght = ViewTargetExtraInfo.ArmLenght.GetDefaultBaseValue() + ViewTargetExtraInfo.ArmLenght.BaseDeltaValue;
+				EXCSpringArm->BaseSocketOffset = ViewTargetExtraInfo.SocketOffset.GetDefaultBaseValue() + ViewTargetExtraInfo.SocketOffset.BaseDeltaValue;
+				EXCSpringArm->BaseTargetOffset = ViewTargetExtraInfo.TargetOffset.GetDefaultBaseValue() + ViewTargetExtraInfo.TargetOffset.BaseDeltaValue;
 
-				if (!EXCSpringArm->bIsBaseModified)
-					EXCSpringArm->bIsBaseModified = true;
+				if (!EXCSpringArm->bIsBaseDirty)
+					EXCSpringArm->bIsBaseDirty = true;
 			}
-			else if(!EXCSpringArm->bIsBaseModified)
+			else if(!EXCSpringArm->bIsBaseDirty)
 			{
-				EXCSpringArm->RestartBase();
+				EXCSpringArm->CleanBase();
 			}
 
-			UE_LOG(LogTemp, Log, TEXT("SocketOffset %s"), *ViewTargetExtraInfo.AdditiveSocketOffset.ToString());
+			/*UE_LOG(LogTemp, Log, TEXT("SocketOffset %s"), *ViewTargetExtraInfo.AdditiveSocketOffset.ToString());
 			UE_LOG(LogTemp, Log, TEXT("TargetOffset %s"), *ViewTargetExtraInfo.AdditiveTargetOffset.ToString());
-			UE_LOG(LogTemp, Log, TEXT("SpringArmLenght %f"), ViewTargetExtraInfo.AdditiveSpringArmLength);
+			UE_LOG(LogTemp, Log, TEXT("SpringArmLenght %f"), ViewTargetExtraInfo.AdditiveSpringArmLength);*/
 		}
 	}
 }

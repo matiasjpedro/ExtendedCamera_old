@@ -19,18 +19,18 @@ void UEXCSpringArmComponent::BeginPlay()
 	bInitialized = true;
 }
 
-void UEXCSpringArmComponent::RestartAdditive()
+void UEXCSpringArmComponent::CleanAdditive()
 {
-	bIsAdditiveModified = false;
+	bIsAdditiveDirty = false;
 
 	AdditiveSpringArmLenght = 0;
 	AdditiveSocketOffset = FVector::ZeroVector;
 	AdditiveTargetOffset = FVector::ZeroVector;
 }
 
-void UEXCSpringArmComponent::RestartBase()
+void UEXCSpringArmComponent::CleanBase()
 {
-	bIsBaseModified = false;
+	bIsBaseDirty = false;
 
 	BaseSpringArmLenght = DefaultSpringArmLenght;
 	BaseSocketOffset = DefaultSocketOffset;

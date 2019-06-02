@@ -30,23 +30,24 @@ bool UEXCCameraModifier::ModifyCameraWithExtra(float DeltaTime, FMinimalViewInfo
 	return false;
 }
 
+//TODO: This could be in the static library blueprint
 void UEXCCameraModifier::Combine(FExtraViewInfo InExtraViewInfo, FExtraViewInfo InModifierExtraViewInfo, FExtraViewInfo& OutExtraViewInfo, float GlobalAlpha)
 {
 	OutExtraViewInfo = InExtraViewInfo;
 
 	if (!InModifierExtraViewInfo.IsAdditiveZero())
 	{
-		OutExtraViewInfo.AdditiveSocketOffset += (InModifierExtraViewInfo.AdditiveSocketOffset) * GlobalAlpha;
-		OutExtraViewInfo.AdditiveTargetOffset += (InModifierExtraViewInfo.AdditiveTargetOffset) * GlobalAlpha;
-		OutExtraViewInfo.AdditiveSpringArmLength += (InModifierExtraViewInfo.AdditiveSpringArmLength) * GlobalAlpha;
+		OutExtraViewInfo.SocketOffset.AdditiveValue += (InModifierExtraViewInfo.SocketOffset.AdditiveValue) * GlobalAlpha;
+		OutExtraViewInfo.TargetOffset.AdditiveValue += (InModifierExtraViewInfo.TargetOffset.AdditiveValue) * GlobalAlpha;
+		OutExtraViewInfo.ArmLenght.AdditiveValue += (InModifierExtraViewInfo.ArmLenght.AdditiveValue) * GlobalAlpha;
 	}
 
 	if (!InModifierExtraViewInfo.IsBaseZero() && InExtraViewInfo.GreaterPriorityApplied < Priority)
 	{
 		OutExtraViewInfo.GreaterPriorityApplied = Priority;
 
-		OutExtraViewInfo.BaseDeltaSocketOffset = (InModifierExtraViewInfo.BaseSocketOffset - InExtraViewInfo.DefaultSocketOffset) * GlobalAlpha;
-		OutExtraViewInfo.BaseDeltaTargetOffset = (InModifierExtraViewInfo.BaseTargetOffset - InExtraViewInfo.DefaultTargetOffset) * GlobalAlpha;
-		OutExtraViewInfo.BaseDeltaSpringArmLenght = (InModifierExtraViewInfo.BaseSpringArmLength - InExtraViewInfo.DefaultSpringArmLenght) * GlobalAlpha;
+		OutExtraViewInfo.SocketOffset.BaseDeltaValue = (InModifierExtraViewInfo.SocketOffset.BaseValue - InExtraViewInfo.SocketOffset.GetDefaultBaseValue()) * GlobalAlpha;
+		OutExtraViewInfo.TargetOffset.BaseDeltaValue = (InModifierExtraViewInfo.TargetOffset.BaseValue - InExtraViewInfo.TargetOffset.GetDefaultBaseValue()) * GlobalAlpha;
+		OutExtraViewInfo.ArmLenght.BaseDeltaValue = (InModifierExtraViewInfo.ArmLenght.BaseValue - InExtraViewInfo.ArmLenght.GetDefaultBaseValue()) * GlobalAlpha;
 	}
 }
