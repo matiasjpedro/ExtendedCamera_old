@@ -12,9 +12,7 @@ bool UEXCCameraModifier::ModifyCamera(float DeltaTime, struct FMinimalViewInfo& 
 
 	if (AEXCPlayerCameraManager* EXCManager = Cast<AEXCPlayerCameraManager>(CameraOwner))
 	{
-		FExtraViewInfo& InOutPOVExtraInfo = EXCManager->ViewTargetExtraInfo;
-
-		bool bShouldStopExtra = ModifyCameraWithExtra(DeltaTime, InOutPOV, InOutPOVExtraInfo);
+		bool bShouldStopExtra = ModifyCameraWithExtra(DeltaTime, InOutPOV, EXCManager->GetViewTargetExtraInfo());
 
 		if (bShouldStopExtra)
 			return true;
@@ -31,7 +29,7 @@ bool UEXCCameraModifier::ModifyCameraWithExtra(float DeltaTime, FMinimalViewInfo
 }
 
 //TODO: This could be in the static library blueprint
-void UEXCCameraModifier::Combine(FExtraViewInfo InExtraViewInfo, FExtraViewInfo InModifierExtraViewInfo, FExtraViewInfo& OutExtraViewInfo, float GlobalAlpha)
+void UEXCCameraModifier::Combine(const FExtraViewInfo& InExtraViewInfo, const FExtraViewInfo& InModifierExtraViewInfo, FExtraViewInfo& OutExtraViewInfo, float GlobalAlpha)
 {
 	OutExtraViewInfo = InExtraViewInfo;
 
@@ -46,8 +44,25 @@ void UEXCCameraModifier::Combine(FExtraViewInfo InExtraViewInfo, FExtraViewInfo 
 	{
 		OutExtraViewInfo.GreaterPriorityApplied = Priority;
 
-		OutExtraViewInfo.SocketOffset.BaseDeltaValue = (InModifierExtraViewInfo.SocketOffset.BaseValue - InExtraViewInfo.SocketOffset.GetDefaultBaseValue()) * GlobalAlpha;
-		OutExtraViewInfo.TargetOffset.BaseDeltaValue = (InModifierExtraViewInfo.TargetOffset.BaseValue - InExtraViewInfo.TargetOffset.GetDefaultBaseValue()) * GlobalAlpha;
-		OutExtraViewInfo.ArmLenght.BaseDeltaValue = (InModifierExtraViewInfo.ArmLenght.BaseValue - InExtraViewInfo.ArmLenght.GetDefaultBaseValue()) * GlobalAlpha;
+		if (InExtraViewInfo.IsBaseZero())
+		{
+			const FEXCVector& CurrentSocketOffset = InExtraViewInfo.SocketOffset;
+			const FEXCVector& CurrentTargetOffset = InExtraViewInfo.TargetOffset;
+			const FEXCFloat& CurrentArmLenght = InExtraViewInfo.ArmLenght;
+
+			OutExtraViewInfo.SocketOffset.BaseDeltaValue = (InModifierExtraViewInfo.SocketOffset.BaseValue - CurrentSocketOffset.GetDefaultBaseValue()) * GlobalAlpha;
+			OutExtraViewInfo.TargetOffset.BaseDeltaValue = (InModifierExtraViewInfo.TargetOffset.BaseValue - CurrentTargetOffset.GetDefaultBaseValue()) * GlobalAlpha;
+			OutExtraViewInfo.ArmLenght.BaseDeltaValue = (InModifierExtraViewInfo.ArmLenght.BaseValue - CurrentArmLenght.GetDefaultBaseValue()) * GlobalAlpha;
+
+			OutExtraViewInfo.SocketOffset.BaseValue = CurrentSocketOffset.GetDefaultBaseValue() + OutExtraViewInfo.SocketOffset.BaseDeltaValue;
+			OutExtraViewInfo.TargetOffset.BaseValue = CurrentTargetOffset.GetDefaultBaseValue() + OutExtraViewInfo.TargetOffset.BaseDeltaValue;
+			OutExtraViewInfo.ArmLenght.BaseValue = CurrentArmLenght.GetDefaultBaseValue() + OutExtraViewInfo.ArmLenght.BaseDeltaValue;
+		}
+		else
+		{
+			OutExtraViewInfo.SocketOffset.BaseValue = FMath::Lerp(InExtraViewInfo.SocketOffset.BaseValue, InModifierExtraViewInfo.SocketOffset.BaseValue, GlobalAlpha);
+			OutExtraViewInfo.TargetOffset.BaseValue = FMath::Lerp(InExtraViewInfo.TargetOffset.BaseValue, InModifierExtraViewInfo.TargetOffset.BaseValue, GlobalAlpha);
+			OutExtraViewInfo.ArmLenght.BaseValue = FMath::Lerp(InExtraViewInfo.ArmLenght.BaseValue, InModifierExtraViewInfo.ArmLenght.BaseValue, GlobalAlpha);
+		}
 	}
 }

@@ -50,11 +50,10 @@ public:
 	 * @param	NewFOV				(out) The modified camera FOV.
 	 */
 	UFUNCTION(BlueprintImplementableEvent, BlueprintCosmetic)
-	void BlueprintModifyCameraWithExtra(float DeltaTime, FVector ViewLocation, FRotator ViewRotation, float FOV, FExtraViewInfo ViewExtraInfo, FVector& NewViewLocation, FRotator& NewViewRotation, float& NewFOV, FExtraViewInfo& NewViewExtraInfo);
-	
+	void BlueprintModifyCameraWithExtra(float DeltaTime, FVector ViewLocation, FRotator ViewRotation, float FOV, const FExtraViewInfo& ViewExtraInfo, FVector& NewViewLocation, FRotator& NewViewRotation, float& NewFOV, FExtraViewInfo& NewViewExtraInfo);
 
 protected:
 
-	UFUNCTION(BlueprintCallable)
-	void Combine(FExtraViewInfo InExtraViewInfo, FExtraViewInfo InModifierExtraViewInfo, FExtraViewInfo& OutExtraViewInfo, float GlobalAlpha  = 1.f);
+	UFUNCTION(BlueprintPure)
+	void Combine(const FExtraViewInfo& InExtraViewInfo, const FExtraViewInfo& InModifierExtraViewInfo, FExtraViewInfo& OutExtraViewInfo, float GlobalAlpha  = 1.f);
 };

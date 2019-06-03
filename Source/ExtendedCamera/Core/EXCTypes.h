@@ -87,13 +87,13 @@ struct FExtraViewInfo
 	//TODO: Maybe the priority could be in the specifics ones?
 	uint8 GreaterPriorityApplied = 0;
 
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category=SpringArm)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=SpringArm)
 	FEXCVector SocketOffset;
 
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category=SpringArm)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=SpringArm)
 	FEXCVector TargetOffset;
 
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category=SpringArm)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=SpringArm)
 	FEXCFloat ArmLenght;
 
 	// Is this equivalent to the other one?

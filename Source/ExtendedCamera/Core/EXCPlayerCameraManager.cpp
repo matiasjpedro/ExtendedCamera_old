@@ -59,16 +59,16 @@ void AEXCPlayerCameraManager::UpdateViewTarget(FTViewTarget& OutVT, float DeltaT
 				EXCSpringArm->CleanAdditive();
 			}
 			
-			if (!ViewTargetExtraInfo.IsBaseDeltaZero())
+			if (!ViewTargetExtraInfo.IsBaseZero())
 			{
-				EXCSpringArm->BaseSpringArmLenght = ViewTargetExtraInfo.ArmLenght.GetDefaultBaseValue() + ViewTargetExtraInfo.ArmLenght.BaseDeltaValue;
-				EXCSpringArm->BaseSocketOffset = ViewTargetExtraInfo.SocketOffset.GetDefaultBaseValue() + ViewTargetExtraInfo.SocketOffset.BaseDeltaValue;
-				EXCSpringArm->BaseTargetOffset = ViewTargetExtraInfo.TargetOffset.GetDefaultBaseValue() + ViewTargetExtraInfo.TargetOffset.BaseDeltaValue;
+				EXCSpringArm->BaseSpringArmLenght = ViewTargetExtraInfo.ArmLenght.BaseValue;
+				EXCSpringArm->BaseSocketOffset = ViewTargetExtraInfo.SocketOffset.BaseValue;
+				EXCSpringArm->BaseTargetOffset = ViewTargetExtraInfo.TargetOffset.BaseDeltaValue;
 
 				if (!EXCSpringArm->bIsBaseDirty)
 					EXCSpringArm->bIsBaseDirty = true;
 			}
-			else if(!EXCSpringArm->bIsBaseDirty)
+			else if(EXCSpringArm->bIsBaseDirty)
 			{
 				EXCSpringArm->CleanBase();
 			}

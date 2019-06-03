@@ -22,6 +22,8 @@ public:
 	UPROPERTY(transient)
 	struct FExtraViewInfo ViewTargetExtraInfo;
 
+	struct FExtraViewInfo& GetViewTargetExtraInfo() { return ViewTargetExtraInfo; }
+
 	/** Pending view target for blending */
 	UPROPERTY(transient)
 	struct FExtraViewInfo PendingViewTargetExtraInfo;
