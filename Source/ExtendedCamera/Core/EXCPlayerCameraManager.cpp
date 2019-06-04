@@ -63,7 +63,7 @@ void AEXCPlayerCameraManager::UpdateViewTarget(FTViewTarget& OutVT, float DeltaT
 			{
 				EXCSpringArm->BaseSpringArmLenght = ViewTargetExtraInfo.ArmLenght.BaseValue;
 				EXCSpringArm->BaseSocketOffset = ViewTargetExtraInfo.SocketOffset.BaseValue;
-				EXCSpringArm->BaseTargetOffset = ViewTargetExtraInfo.TargetOffset.BaseDeltaValue;
+				EXCSpringArm->BaseTargetOffset = ViewTargetExtraInfo.TargetOffset.BaseValue;
 
 				if (!EXCSpringArm->bIsBaseDirty)
 					EXCSpringArm->bIsBaseDirty = true;
